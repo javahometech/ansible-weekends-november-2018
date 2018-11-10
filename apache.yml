@@ -1,6 +1,10 @@
 ---
 - hosts: 172.31.21.217
   become: True
+  vars:
+    - apache_port: 80
+    - apache_deploy_path: /var/www/html
+    - apache_conf_path: /etc/httpd/conf  
   tasks:
     - name: Install Apache Server
       yum:
@@ -17,11 +21,13 @@
     - name: Copy file from CM to Apache Server
       copy:
         src: index.html
-        dest: /var/www/html/index.html
+        dest: "{{apache_deploy_path}}/index.html"
+      notify:
+        - Restart Apache
     - name: Change Port Number
-      copy:
+      template:
        src: httpd.conf
-       dest: /etc/httpd/conf/httpd.conf
+       dest: "{{apache_conf_path}}/httpd.conf"
       notify:
          - Restart Apache
   handlers:
