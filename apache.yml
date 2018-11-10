@@ -18,3 +18,14 @@
       copy:
         src: index.html
         dest: /var/www/html/index.html
+    - name: Change Port Number
+      copy:
+       src: httpd.conf
+       dest: /etc/httpd/conf/httpd.conf
+      notify:
+         - Restart Apache
+  handlers:
+    - name: Restart Apache
+      service:
+        name: httpd
+        state: restarted
