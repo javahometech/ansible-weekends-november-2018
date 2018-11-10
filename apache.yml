@@ -1,0 +1,20 @@
+---
+- hosts: 172.31.21.217
+  become: True
+  tasks:
+    - name: Install Apache Server
+      yum:
+        name: httpd
+        state: present
+    - name: Enable on reboot
+      service:
+        name: httpd
+        enabled: True
+    - name: Start Apache Server
+      service:
+        name: httpd
+        state: started  
+    - name: Copy file from CM to Apache Server
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
